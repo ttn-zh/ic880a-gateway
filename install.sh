@@ -83,7 +83,7 @@ make
 popd
 
 
-if [ ! -d "$INSTALL_DIR/packet_forwarder" ]; then
+if [ ! -d packet_forwarder ]; then
     git clone https://github.com/TheThingsNetwork/packet_forwarder.git
     pushd packet_forwarder
 else
@@ -95,6 +95,11 @@ fi
 make
 
 popd
+
+# Symlink poly packet forwarder
+if [ ! -d bin ]; then mkdir bin; fi
+ln -sf ./packet_forwarder/poly_pkt_fwd/poly_pkt_fwd ./bin/poly_pkt_fwd
+cp -f ./packet_forwarder/poly_pkt_fwd/*.json ./bin
 
 popd
 
