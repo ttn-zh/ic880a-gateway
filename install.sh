@@ -85,11 +85,16 @@ popd
 
 if [ ! -d "$INSTALL_DIR/packet_forwarder" ]; then
     git clone https://github.com/TheThingsNetwork/packet_forwarder.git
+    pushd packet_forwarder
 else
     pushd packet_forwarder
     git pull
-    popd
+    git reset --hard
 fi
+
+make
+
+popd
 
 popd
 
