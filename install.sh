@@ -51,6 +51,7 @@ if [ ! -d libmpsse ]; then
     pushd libmpsse/src
 else
     pushd libmpsse/src
+    git reset --hard
     git pull
 fi
 
