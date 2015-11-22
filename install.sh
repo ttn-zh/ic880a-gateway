@@ -37,4 +37,8 @@ if [[ $NEW_HOSTNAME != $CURRENT_HOSTNAME ]]; then
     sed -i "s/$CURRENT_HOSTNAME/$NEW_HOSTNAME/" /etc/hosts
 fi
 
+# Check dependencies
+echo "Updating dependencies..."
+apt-get install swig libftdi-dev python-dev
+
 echo "Installation completed."
