@@ -18,4 +18,5 @@ if [[ $OLD_HEAD != $NEW_HEAD ]]; then
     exec "./install.sh $1"
 fi
 
+
 echo "Installation completed."
