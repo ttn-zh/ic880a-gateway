@@ -64,6 +64,7 @@ INSTALL_DIR="/opt/ttn-gateway"
 if [ ! -d "$INSTALL_DIR" ]; then mkdir $INSTALL_DIR; fi
 pushd $INSTALL_DIR
 
+# Build libraries
 if [ ! -d libmpsse ]; then
     git clone https://github.com/devttys0/libmpsse.git
     pushd libmpsse/src
@@ -80,7 +81,7 @@ ldconfig
 
 popd
 
-
+# Build LoRa gateway app
 if [ ! -d lora_gateway ]; then
     git clone https://github.com/TheThingsNetwork/lora_gateway.git
     pushd lora_gateway
@@ -100,7 +101,7 @@ make
 
 popd
 
-
+# Build packet forwarder
 if [ ! -d packet_forwarder ]; then
     git clone https://github.com/TheThingsNetwork/packet_forwarder.git
     pushd packet_forwarder
@@ -128,3 +129,12 @@ echo -e "{\n\t\"gateway_conf\": {\n\t\t\"gateway_ID\": \"0000000000000000\",\n\t
 popd
 
 echo "Installation completed."
+
+# Start packet forwarder as a service
+cp ./start.sh $INSTALL_DIR/bin/
+cp ./ttn-gateway.service /lib/systemd/system/
+systemctl enable ttn-gateway.service
+
+echo "The system will reboot in 5 seconds..."
+sleep 5
+shutdown -r now
