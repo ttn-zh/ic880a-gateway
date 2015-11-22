@@ -15,7 +15,7 @@ NEW_HEAD=$(git rev-parse HEAD)
 
 if [[ $OLD_HEAD != $NEW_HEAD ]]; then
     echo "New installer found. Restarting process..."
-    exec "./install.sh $1"
+    exec "./install.sh"
 fi
 
 
