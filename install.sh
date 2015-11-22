@@ -72,9 +72,11 @@ else
     git pull
 fi
 
+cp ./libloragw/99-libftdi.rules /etc/udev/rules.d/99-libftdi.rules
+
 sed -i -e 's/CFG_SPI= native/CFG_SPI= ftdi/g' ./libloragw/library.cfg
 sed -i -e 's/PLATFORM= kerlink/PLATFORM= lorank/g' ./libloragw/library.cfg
-sed -i -e 's/ATTRS{idProduct}=="6010"/ATTRS{idProduct}=="6014"/g' <./libloragw/99-libftdi.rules >/etc/udev/rules.d/99-libftdi.rules
+sed -i -e 's/ATTRS{idProduct}=="6010"/ATTRS{idProduct}=="6014"/g' /etc/udev/rules.d/99-libftdi.rules
 
 make
 
