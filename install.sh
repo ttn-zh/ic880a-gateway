@@ -26,6 +26,24 @@ if [[ $OLD_HEAD != $NEW_HEAD ]]; then
     exec "./install.sh" "$VERSION"
 fi
 
+# Retrieve gateway configuration for later
+echo "Configure your gateway:"
+printf "       Descriptive name [ttn-ic880a]:"
+read GATEWAY_NAME
+if [[ $GATEWAY_NAME == "" ]]; then GATEWAY_NAME="ttn-ic880a"; fi
+
+printf "       Contact email: "
+read GATEWAY_EMAIL
+
+printf "       Latitude [0]: "
+read GATEWAY_LAT
+if [[ $GATEWAY_LAT == "" ]]; then GATEWAY_LAT=0; fi
+
+printf "       Longitude [0]: "
+read GATEWAY_LON
+if [[ $GATEWAY_LON == "" ]]; then GATEWAY_LON=0; fi
+
+
 # Change hostname if needed
 CURRENT_HOSTNAME=$(hostname)
 NEW_HOSTNAME="ttn-gateway"
@@ -99,9 +117,10 @@ popd
 # Symlink poly packet forwarder
 if [ ! -d bin ]; then mkdir bin; fi
 if [ -f ./bin/poly_pkt_fwd ]; then rm ./bin/poly_pkt_fwd; fi
-ln -s ./packet_forwarder/poly_pkt_fwd/poly_pkt_fwd ./bin/poly_pkt_fwd
-cp -f ./packet_forwarder/poly_pkt_fwd/*.json ./bin
-chmod 755 ./bin/poly_pkt_fwd
+ln -s $INSTALL_DIR/packet_forwarder/poly_pkt_fwd/poly_pkt_fwd ./bin/poly_pkt_fwd
+cp -f ./packet_forwarder/poly_pkt_fwd/global_conf.json ./bin/global_conf.json
+
+echo -e "{\n\t\"gateway_conf\": {\n\t\t\"gateway_ID\": \"0000000000000000\",\n\t\t\"servers\": [ { \"server_address\": \"croft.thethings.girovito.nl\", \"serv_port_up\": 1700, \"serv_port_down\": 1701, \"serv_enabled\": true } ],\n\t\t\"ref_latitude\": $GATEWAY_LAT,\n\t\t\"ref_longitude\": $GATEWAY_LON,\n\t\t\"contact_email\": \"$GATEWAY_EMAIL\",\n\t\t\"description\": \"$GATEWAY_NAME\" \n\t}\n}" >./bin/local_conf.json
 
 popd
 
