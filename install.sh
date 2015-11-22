@@ -46,13 +46,20 @@ INSTALL_DIR="/opt/ttn-gateway"
 if [ ! -d "$INSTALL_DIR" ]; then mkdir $INSTALL_DIR; fi
 pushd $INSTALL_DIR
 
-if [ ! -d "$INSTALL_DIR/libmpsse" ]; then
+if [ ! -d libmpsse ]; then
     git clone https://github.com/devttys0/libmpsse.git
+    pushd libmpsse
 else
     pushd libmpsse
     git pull
-    popd
 fi
+
+./configure --disable-python
+make
+make install
+ldconfig
+
+popd
 
 if [ ! -d "$INSTALL_DIR/lora_gateway" ]; then
     git clone https://github.com/TheThingsNetwork/lora_gateway.git
