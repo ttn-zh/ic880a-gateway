@@ -48,9 +48,9 @@ pushd $INSTALL_DIR
 
 if [ ! -d libmpsse ]; then
     git clone https://github.com/devttys0/libmpsse.git
-    pushd libmpsse
+    pushd libmpsse/src
 else
-    pushd libmpsse
+    pushd libmpsse/src
     git pull
 fi
 
