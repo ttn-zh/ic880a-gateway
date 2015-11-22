@@ -98,7 +98,7 @@ popd
 
 # Symlink poly packet forwarder
 if [ ! -d bin ]; then mkdir bin; fi
-rm ./bin/poly_pkt_fwd
+if [ -f ./bin/poly_pkt_fwd ]; then rm ./bin/poly_pkt_fwd; fi
 ln -s ./packet_forwarder/poly_pkt_fwd/poly_pkt_fwd ./bin/poly_pkt_fwd
 cp -f ./packet_forwarder/poly_pkt_fwd/*.json ./bin
 chmod 755 ./bin/poly_pkt_fwd
