@@ -2,18 +2,13 @@
 
 Reference setup for [The Things Network](http://thethingsnetwork.org/) gateways based on the iC880a concentrator with a Raspberry Pi host.
 
+## Setup based on Raspbian image
 
-## Use a pre-configured SD image
-
-soon!
-
-## Build an image based on Raspbian
-
-- Download Raspbian Jessie from https://www.raspberrypi.org/downloads/
-- Install to SD card according to https://www.raspberrypi.org/documentation/installation/installing-images/README.md
+- Download [Raspbian Jessie](https://www.raspberrypi.org/downloads/)
+- Follow the [installation instruction](https://www.raspberrypi.org/documentation/installation/installing-images/README.md) to create the SD card
 - Start your RPi connected to Ethernet
-- Plug the iC880a (**WARNING**: first power to the wall socket, then to the gateway DC jack, and ONLY THEN USB to RPi!)
-- From a computer in the same LAN, ssh into the RPi using the default hostname:
+- Plug the iC880a (**WARNING**: first power plug to the wall socket, then to the gateway DC jack, and ONLY THEN USB to RPi!)
+- From a computer in the same LAN, `ssh` into the RPi using the default hostname:
 
         local $ ssh pi@raspberrypi.local
 
@@ -35,7 +30,7 @@ soon!
         $ sudo apt-get autoclean
         $ sudo apt-get update
 
-- Create new user for TTN (default password: wishyouwereastrongerpassword) and add it to sudoers
+- Create new user for TTN and add it to sudoers
 
         $ sudo adduser ttn 
         $ sudo adduser ttn sudo
