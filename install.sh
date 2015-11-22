@@ -62,13 +62,24 @@ ldconfig
 
 popd
 
-if [ ! -d "$INSTALL_DIR/lora_gateway" ]; then
+
+if [ ! -d lora_gateway ]; then
     git clone https://github.com/TheThingsNetwork/lora_gateway.git
+    pushd lora_gateway
 else
     pushd lora_gateway
+    git reset --hard
     git pull
-    popd
 fi
+
+sed -i -e 's/CFG_SPI= native/CFG_SPI= ftdi/g' ./libloragw/library.cfg
+sed -i -e 's/PLATFORM= kerlink/PLATFORM= lorank/g' ./libloragw/library.cfg
+sed -i -e 's/ATTRS{idProduct}=="6010"/ATTRS{idProduct}=="6014"/g' ./libloragw/99-libftdi.rules /etc/udev/rules.d/99-libftdi.rules
+
+make
+
+popd
+
 
 if [ ! -d "$INSTALL_DIR/packet_forwarder" ]; then
     git clone https://github.com/TheThingsNetwork/packet_forwarder.git
