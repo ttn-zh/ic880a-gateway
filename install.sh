@@ -4,7 +4,7 @@
 set -e
 
 if [ $UID != 0 ]; then
-    echo "Operation not permitted."
+    echo "ERROR: Operation not permitted. Forgot sudo?"
     exit 1
 fi
 
@@ -38,7 +38,7 @@ if [[ $NEW_HOSTNAME != $CURRENT_HOSTNAME ]]; then
 fi
 
 # Check dependencies
-echo "Updating dependencies..."
+echo "Installing dependencies..."
 apt-get install swig libftdi-dev python-dev
 
 echo "Installation completed."
