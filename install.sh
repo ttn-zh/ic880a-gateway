@@ -41,4 +41,15 @@ fi
 echo "Installing dependencies..."
 apt-get install swig libftdi-dev python-dev
 
+# Install LoRaWAN packet forwarder repositories
+INSTALL_DIR="/opt/ttn-gateway"
+if [ ! -d "$INSTALL_DIR" ]; then mkdir $INSTALL_DIR; fi
+pushd $INSTALL_DIR
+
+if [ ! -d "$INSTALL_DIR/libmpsse" ]; then
+    git clone https://github.com/devttys0/libmpsse.git
+fi
+
+popd
+
 echo "Installation completed."
