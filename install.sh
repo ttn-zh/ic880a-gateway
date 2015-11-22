@@ -48,6 +48,26 @@ pushd $INSTALL_DIR
 
 if [ ! -d "$INSTALL_DIR/libmpsse" ]; then
     git clone https://github.com/devttys0/libmpsse.git
+else
+    pushd libmpsse
+    git pull
+    popd
+fi
+
+if [ ! -d "$INSTALL_DIR/lora_gateway" ]; then
+    git clone https://github.com/TheThingsNetwork/lora_gateway.git
+else
+    pushd lora_gateway
+    git pull
+    popd
+fi
+
+if [ ! -d "$INSTALL_DIR/packet_forwarder" ]; then
+    git clone https://github.com/TheThingsNetwork/packet_forwarder.git
+else
+    pushd packet_forwarder
+    git pull
+    popd
 fi
 
 popd
