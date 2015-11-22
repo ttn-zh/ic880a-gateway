@@ -6,6 +6,9 @@ set -e
 VERSION="master"
 if [[ $1 != "" ]]; then VERSION=$1; fi
 
+echo "The Things Network Gateway installer"
+echo "Version $VERSION"
+
 # Update the gateway installer to the correct branch (defaults to master)
 echo "Updating installer files..."
 git checkout -q $VERSION
@@ -15,7 +18,7 @@ NEW_HEAD=$(git rev-parse HEAD)
 
 if [[ $OLD_HEAD != $NEW_HEAD ]]; then
     echo "New installer found. Restarting process..."
-    exec "./install.sh"
+    exec "./install.sh" "$VERSION"
 fi
 
 echo "Installation completed."
