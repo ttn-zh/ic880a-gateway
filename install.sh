@@ -8,13 +8,13 @@ if [ $UID != 0 ]; then
     exit 1
 fi
 
-VERSION="master"
+VERSION="spi"
 if [[ $1 != "" ]]; then VERSION=$1; fi
 
 echo "The Things Network Gateway installer"
 echo "Version $VERSION"
 
-# Update the gateway installer to the correct branch (defaults to master)
+# Update the gateway installer to the correct branch
 echo "Updating installer files..."
 git checkout -q $VERSION
 OLD_HEAD=$(git rev-parse HEAD)
@@ -57,27 +57,24 @@ fi
 
 # Check dependencies
 echo "Installing dependencies..."
-apt-get install swig libftdi-dev python-dev
+apt-get install swig python-dev
 
 # Install LoRaWAN packet forwarder repositories
 INSTALL_DIR="/opt/ttn-gateway"
 if [ ! -d "$INSTALL_DIR" ]; then mkdir $INSTALL_DIR; fi
 pushd $INSTALL_DIR
 
-# Build libraries
-if [ ! -d libmpsse ]; then
-    git clone https://github.com/devttys0/libmpsse.git
-    pushd libmpsse/src
+# Build WiringPi
+if [ ! -d wiringPi ]; then
+    git clone git://git.drogon.net/wiringPi
+    pushd wiringPi
 else
-    pushd libmpsse/src
+    pushd wiringPi
     git reset --hard
     git pull
 fi
 
-./configure --disable-python
-make
-make install
-ldconfig
+./build
 
 popd
 
@@ -91,11 +88,7 @@ else
     git pull
 fi
 
-cp ./libloragw/99-libftdi.rules /etc/udev/rules.d/99-libftdi.rules
-
-sed -i -e 's/CFG_SPI= native/CFG_SPI= ftdi/g' ./libloragw/library.cfg
 sed -i -e 's/PLATFORM= kerlink/PLATFORM= lorank/g' ./libloragw/library.cfg
-sed -i -e 's/ATTRS{idProduct}=="6010"/ATTRS{idProduct}=="6014"/g' /etc/udev/rules.d/99-libftdi.rules
 
 make
 

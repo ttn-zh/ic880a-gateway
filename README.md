@@ -1,13 +1,29 @@
 # The Things Network: iC880a-based gateway
 
-Reference setup for [The Things Network](http://thethingsnetwork.org/) gateways based on the iC880a concentrator with a Raspberry Pi host.
+Reference setup for [The Things Network](http://thethingsnetwork.org/) gateways based on the iC880a SPI concentrator with a Raspberry Pi host.
 
-## Setup based on Raspbian image
+## Hardware setup
+
+First, connect the concentrator board to the Raspberry Pi as follows:
+
+iC880a pin      | Description   | RPi physical pin
+----------------|---------------|-----------------
+21              | Supply 5V     | 2
+22              | GND           | 6
+13              | Reset         | 22
+14              | SPI CLK       | 23
+15              | MISO          | 21
+16              | MOSI          | 19
+17              | NSS           | 24
+
+Now you're ready to start the software setup.
+
+## Software setup (Raspbian)
 
 - Download [Raspbian Jessie](https://www.raspberrypi.org/downloads/)
 - Follow the [installation instruction](https://www.raspberrypi.org/documentation/installation/installing-images/README.md) to create the SD card
-- Start your RPi connected to Ethernet
-- Plug the iC880a (**WARNING**: first power plug to the wall socket, then to the gateway DC jack, and ONLY THEN USB to RPi!)
+- Connect an Ethernet cable to the RPi
+- Plug the power supply of the RPi which will also power the concentrator board (**WARNING**: never power up without the antenna!)
 - From a computer in the same LAN, `ssh` into the RPi using the default hostname:
 
         local $ ssh pi@raspberrypi.local
@@ -43,7 +59,7 @@ Reference setup for [The Things Network](http://thethingsnetwork.org/) gateways 
 
         $ git clone https://github.com/gonzalocasas/ic880a-gateway.git ~/ic880a-gateway
         $ cd ~/ic880a-gateway
-        $ sudo ./install.sh
+        $ sudo ./install.sh spi
 
 
 # Credits
