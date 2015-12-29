@@ -2,6 +2,8 @@
 
 Reference setup for [The Things Network](http://thethingsnetwork.org/) gateways based on the iC880a SPI concentrator with a Raspberry Pi host.
 
+This installer targets the **SPI version** of the board, if you have the USB version, [check this branch](https://github.com/ttn-zh/ic880a-gateway/tree/master).
+
 ## Hardware setup
 
 First, connect the concentrator board to the Raspberry Pi as follows:
