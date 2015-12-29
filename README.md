@@ -28,10 +28,11 @@ Now you're ready to start the software setup.
 
         local $ ssh pi@raspberrypi.local
 
-- Disable graphical boot mode and reboot:
+- Use `raspi-config` utility to: 1) disable graphical boot mode and 2) to **enable SPI** (`Advanced options -> SPI`):
 
         $ sudo raspi-config
 
+- Reboot
 - Configure locales and time zone:
 
         $ sudo dpkg-reconfigure locales
