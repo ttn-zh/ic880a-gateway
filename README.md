@@ -58,7 +58,7 @@ Now you're ready to start the software setup.
 
 - Clone the installer and start the installation
 
-        $ git clone https://github.com/gonzalocasas/ic880a-gateway.git ~/ic880a-gateway
+        $ git clone https://github.com/ttn-zh/ic880a-gateway.git ~/ic880a-gateway
         $ cd ~/ic880a-gateway
         $ sudo ./install.sh spi
 
