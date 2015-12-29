@@ -16,8 +16,9 @@ echo "Version $VERSION"
 
 # Update the gateway installer to the correct branch (defaults to master)
 echo "Updating installer files..."
-git checkout -q $VERSION
 OLD_HEAD=$(git rev-parse HEAD)
+git fetch
+git checkout -q $VERSION
 git pull
 NEW_HEAD=$(git rev-parse HEAD)
 
