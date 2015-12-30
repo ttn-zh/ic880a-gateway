@@ -85,7 +85,7 @@ popd
 
 # Build LoRa gateway app
 if [ ! -d lora_gateway ]; then
-    git clone https://github.com/TheThingsNetwork/lora_gateway.git
+    git clone https://github.com/ttn-zh/lora_gateway.git
     pushd lora_gateway
 else
     pushd lora_gateway
@@ -93,7 +93,7 @@ else
     git pull
 fi
 
-sed -i -e 's/PLATFORM= kerlink/PLATFORM= lorank/g' ./libloragw/library.cfg
+sed -i -e 's/PLATFORM= kerlink/PLATFORM= imst_rpi/g' ./libloragw/library.cfg
 
 make
 
