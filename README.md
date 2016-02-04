@@ -8,6 +8,8 @@ This installer targets the **SPI version** of the board, if you have the USB ver
 
 First, connect the concentrator board to the Raspberry Pi as follows:
 
+Note: Pin 1-20 are on the bottom side of the concentrator board (viewed from the top), pin 21-23 on the top,left side of the board
+
 iC880a pin      | Description   | RPi physical pin
 ----------------|---------------|-----------------
 21              | Supply 5V     | 2
