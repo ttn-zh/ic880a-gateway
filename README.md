@@ -24,7 +24,7 @@ Now you're ready to start the software setup.
 
 ## Software setup (Raspbian)
 
-- Download [Raspbian Jessie](https://www.raspberrypi.org/downloads/)
+- Download [Raspbian Jessie Lite](https://www.raspberrypi.org/downloads/)
 - Follow the [installation instruction](https://www.raspberrypi.org/documentation/installation/installing-images/README.md) to create the SD card
 - Connect an Ethernet cable to the RPi
 - Plug the power supply of the RPi which will also power the concentrator board (**WARNING**: never power up without the antenna!)
@@ -32,7 +32,7 @@ Now you're ready to start the software setup.
 
         local $ ssh pi@raspberrypi.local
 
-- Use `raspi-config` utility to: 1) disable graphical boot mode and 2) to **enable SPI** (`Advanced options -> SPI`):
+- Use `raspi-config` utility to **enable SPI** (`9 Advanced options -> A6 SPI`) and also expand the filesystem (`1 Expand filesystem`):
 
         $ sudo raspi-config
 
@@ -42,18 +42,14 @@ Now you're ready to start the software setup.
         $ sudo dpkg-reconfigure locales
         $ sudo dpkg-reconfigure tzdata
 
-- Remove desktop-related packages:
+- Make sure you have an updated installation:
 
-        $ sudo apt-get install deborphan
-        $ sudo apt-get autoremove --purge libx11-.* lxde-.* raspberrypi-artwork xkb-data omxplayer penguinspuzzle sgml-base xml-core alsa-.* cifs-.* samba-.* fonts-.* desktop-* gnome-.*
-        $ sudo apt-get autoremove --purge $(deborphan)
-        $ sudo apt-get autoremove --purge
-        $ sudo apt-get autoclean
         $ sudo apt-get update
+        $ sudo apt-get upgrade
 
 - Create new user for TTN and add it to sudoers
 
-        $ sudo adduser ttn 
+        $ sudo adduser ttn
         $ sudo adduser ttn sudo
 
 - Logout and login as `ttn` and remove the default `pi` user
