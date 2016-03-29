@@ -27,8 +27,12 @@ if [[ $OLD_HEAD != $NEW_HEAD ]]; then
     exec "./install.sh" "$VERSION"
 fi
 
-# Retrieve gateway configuration for later
+# Request gateway configuration params for later
 echo "Configure your gateway:"
+printf "       Host name [ttn-gateway]:"
+read NEW_HOSTNAME
+if [[ $NEW_HOSTNAME == "" ]]; then NEW_HOSTNAME="ttn-gateway"; fi
+
 printf "       Descriptive name [ttn-ic880a]:"
 read GATEWAY_NAME
 if [[ $GATEWAY_NAME == "" ]]; then GATEWAY_NAME="ttn-ic880a"; fi
@@ -51,7 +55,6 @@ if [[ $GATEWAY_ALT == "" ]]; then GATEWAY_ALT=0; fi
 
 # Change hostname if needed
 CURRENT_HOSTNAME=$(hostname)
-NEW_HOSTNAME="ttn-gateway"
 
 if [[ $NEW_HOSTNAME != $CURRENT_HOSTNAME ]]; then
     echo "Updating hostname to '$NEW_HOSTNAME'..."
