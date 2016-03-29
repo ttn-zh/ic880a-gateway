@@ -73,6 +73,7 @@ if [ -d wiringPi ]; then
     pushd wiringPi
     ./build uninstall
     popd
+    rm -rF wiringPi
 fi
 
 # Build LoRa gateway app
