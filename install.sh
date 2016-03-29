@@ -144,15 +144,17 @@ if [ -f ./bin/poly_pkt_fwd ]; then rm ./bin/poly_pkt_fwd; fi
 ln -s $INSTALL_DIR/packet_forwarder/poly_pkt_fwd/poly_pkt_fwd ./bin/poly_pkt_fwd
 cp -f ./packet_forwarder/poly_pkt_fwd/global_conf.json ./bin/global_conf.json
 
+LOCAL_CONFIG_FILE=$INSTALL_DIR/bin/local_conf.json
+
 if [ "$REMOTE_CONFIG" = true ] ; then
     # Get remote configuration repo
     if [ ! -d gateway-remote-config ]; then
         # Remove old file
-        if [ ../bin/local_conf.json ]; then rm ../bin/local_conf.json; fi;
+        if [ -f $LOCAL_CONFIG_FILE ]; then rm $LOCAL_CONFIG_FILE; fi;
 
         git clone https://github.com/ttn-zh/gateway-remote-config.git
         pushd gateway-remote-config
-        ln -s $GATEWAY_EUI.json ../bin/local_conf.json
+        ln -s $GATEWAY_EUI.json $LOCAL_CONFIG_FILE
     else
         pushd gateway-remote-config
         git pull
@@ -161,7 +163,7 @@ if [ "$REMOTE_CONFIG" = true ] ; then
 
     popd
 else
-    echo -e "{\n\t\"gateway_conf\": {\n\t\t\"gateway_ID\": \"$GATEWAY_EUI\",\n\t\t\"servers\": [ { \"server_address\": \"croft.thethings.girovito.nl\", \"serv_port_up\": 1700, \"serv_port_down\": 1701, \"serv_enabled\": true } ],\n\t\t\"ref_latitude\": $GATEWAY_LAT,\n\t\t\"ref_longitude\": $GATEWAY_LON,\n\t\t\"ref_altitude\": $GATEWAY_ALT,\n\t\t\"contact_email\": \"$GATEWAY_EMAIL\",\n\t\t\"description\": \"$GATEWAY_NAME\" \n\t}\n}" >./bin/local_conf.json
+    echo -e "{\n\t\"gateway_conf\": {\n\t\t\"gateway_ID\": \"$GATEWAY_EUI\",\n\t\t\"servers\": [ { \"server_address\": \"croft.thethings.girovito.nl\", \"serv_port_up\": 1700, \"serv_port_down\": 1701, \"serv_enabled\": true } ],\n\t\t\"ref_latitude\": $GATEWAY_LAT,\n\t\t\"ref_longitude\": $GATEWAY_LON,\n\t\t\"ref_altitude\": $GATEWAY_ALT,\n\t\t\"contact_email\": \"$GATEWAY_EMAIL\",\n\t\t\"description\": \"$GATEWAY_NAME\" \n\t}\n}" >$LOCAL_CONFIG_FILE
 fi
 
 popd
