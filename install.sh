@@ -45,7 +45,7 @@ if [[ `grep "$GATEWAY_EUI_NIC" /proc/net/dev` == "" ]]; then
 fi
 
 GATEWAY_EUI="FFFE"$(ip link show $GATEWAY_EUI_NIC | awk '/ether/ {print $2}' | awk -F\: '{print $1$2$3$4$5$6}')
-GATEWAY_EUI={$GATEWAY_EUI^^} # toupper
+GATEWAY_EUI=${GATEWAY_EUI^^} # toupper
 
 read -r -p "Do you want to use remote settings file? [Y/n]" response
 response=${response,,} # tolower
