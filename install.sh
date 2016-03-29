@@ -147,6 +147,9 @@ cp -f ./packet_forwarder/poly_pkt_fwd/global_conf.json ./bin/global_conf.json
 if [ "$REMOTE_CONFIG" = true ] ; then
     # Get remote configuration repo
     if [ ! -d gateway-remote-config ]; then
+        # Remove old file
+        if [ ../bin/local_conf.json ]; then rm ../bin/local_conf.json; fi;
+
         git clone https://github.com/ttn-zh/gateway-remote-config.git
         pushd gateway-remote-config
         ln -s $GATEWAY_EUI.json ../bin/local_conf.json
