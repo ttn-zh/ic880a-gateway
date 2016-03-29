@@ -42,10 +42,11 @@ Now you're ready to start the software setup.
         $ sudo dpkg-reconfigure locales
         $ sudo dpkg-reconfigure tzdata
 
-- Make sure you have an updated installation:
+- Make sure you have an updated installation and install `git`:
 
         $ sudo apt-get update
         $ sudo apt-get upgrade
+        $ sudo apt-get install git
 
 - Create new user for TTN and add it to sudoers
 

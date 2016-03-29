@@ -63,28 +63,17 @@ if [[ $NEW_HOSTNAME != $CURRENT_HOSTNAME ]]; then
     sed -i "s/$CURRENT_HOSTNAME/$NEW_HOSTNAME/" /etc/hosts
 fi
 
-# Install dependencies
-echo "Installing dependencies..."
-apt-get install git
-
 # Install LoRaWAN packet forwarder repositories
 INSTALL_DIR="/opt/ttn-gateway"
 if [ ! -d "$INSTALL_DIR" ]; then mkdir $INSTALL_DIR; fi
 pushd $INSTALL_DIR
 
-# Build WiringPi
-if [ ! -d wiringPi ]; then
-    git clone git://git.drogon.net/wiringPi
+# Remove WiringPi built from source (older installer versions)
+if [ -d wiringPi ]; then
     pushd wiringPi
-else
-    pushd wiringPi
-    git reset --hard
-    git pull
+    ./build uninstall
+    popd
 fi
-
-./build
-
-popd
 
 # Build LoRa gateway app
 if [ ! -d lora_gateway ]; then
@@ -115,6 +104,10 @@ fi
 make
 
 popd
+
+# Install dependencies
+echo "Installing dependencies..."
+apt-get install wiringpi
 
 # Symlink poly packet forwarder
 if [ ! -d bin ]; then mkdir bin; fi
