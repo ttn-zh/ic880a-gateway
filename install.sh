@@ -49,10 +49,10 @@ GATEWAY_EUI=${GATEWAY_EUI^^} # toupper
 
 echo "Detected EUI $GATEWAY_EUI from $GATEWAY_EUI_NIC"
 
-read -r -p "Do you want to use remote settings file? [Y/n]" response
+read -r -p "Do you want to use remote settings file? [y/N]" response
 response=${response,,} # tolower
 
-if [[ $response =~ ^(yes|y| ) ]]; then
+if [[ $response =~ ^(yes|y) ]]; then
     NEW_HOSTNAME="ttn-gateway"
     REMOTE_CONFIG=true
 else
