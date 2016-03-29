@@ -63,9 +63,9 @@ if [[ $NEW_HOSTNAME != $CURRENT_HOSTNAME ]]; then
     sed -i "s/$CURRENT_HOSTNAME/$NEW_HOSTNAME/" /etc/hosts
 fi
 
-# Check dependencies
+# Install dependencies
 echo "Installing dependencies..."
-apt-get install swig python-dev
+apt-get install git
 
 # Install LoRaWAN packet forwarder repositories
 INSTALL_DIR="/opt/ttn-gateway"
