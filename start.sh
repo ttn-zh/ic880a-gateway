@@ -1,13 +1,15 @@
 #! /bin/bash
 
 # Reset iC880a PIN
-gpio -1 mode 22 out
-gpio -1 write 22 0
-sleep 0.1
-gpio -1 write 22 1
-sleep 0.1
-gpio -1 write 22 0
-sleep 0.1
+pin=17
+echo "$pin"  > /sys/class/gpio/export 
+echo "out" > /sys/class/gpio/gpio$pin/direction 
+echo "0"   > /sys/class/gpio/gpio$pin/value 
+sleep 0.1  
+echo "1"   > /sys/class/gpio/gpio$pin/value 
+sleep 0.1  
+echo "0"   > /sys/class/gpio/gpio$pin/value
+echo "$pin"  > /sys/class/gpio/unexport 
 
 # Test the connection, wait if needed.
 while [[ $(ping -c1 google.com 2>&1 | grep " 0% packet loss") == "" ]]; do
