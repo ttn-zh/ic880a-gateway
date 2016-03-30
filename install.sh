@@ -27,31 +27,62 @@ if [[ $OLD_HEAD != $NEW_HEAD ]]; then
     exec "./install.sh" "$VERSION"
 fi
 
-# Retrieve gateway configuration for later
-echo "Configure your gateway:"
-printf "       Descriptive name [ttn-ic880a]:"
-read GATEWAY_NAME
-if [[ $GATEWAY_NAME == "" ]]; then GATEWAY_NAME="ttn-ic880a"; fi
+# Request gateway configuration data
+# There are two ways to do it, manually specify everything
+# or rely on the gateway EUI and retrieve settings files from remote (recommended)
+echo "Gateway configuration:"
 
-printf "       Contact email: "
-read GATEWAY_EMAIL
+# Try to get gateway ID from MAC address
+# First try eth0, if that does not exist, try wlan0 (for RPi Zero)
+GATEWAY_EUI_NIC="eth0"
+if [[ `grep "$GATEWAY_EUI_NIC" /proc/net/dev` == "" ]]; then
+    GATEWAY_EUI_NIC="wlan0"
+fi
 
-printf "       Latitude [0]: "
-read GATEWAY_LAT
-if [[ $GATEWAY_LAT == "" ]]; then GATEWAY_LAT=0; fi
+if [[ `grep "$GATEWAY_EUI_NIC" /proc/net/dev` == "" ]]; then
+    echo "ERROR: No network interface found. Cannot set gateway ID."
+    exit 1
+fi
 
-printf "       Longitude [0]: "
-read GATEWAY_LON
-if [[ $GATEWAY_LON == "" ]]; then GATEWAY_LON=0; fi
+GATEWAY_EUI="FFFE"$(ip link show $GATEWAY_EUI_NIC | awk '/ether/ {print $2}' | awk -F\: '{print $1$2$3$4$5$6}')
+GATEWAY_EUI=${GATEWAY_EUI^^} # toupper
 
-printf "       Altitude [0]: "
-read GATEWAY_ALT
-if [[ $GATEWAY_ALT == "" ]]; then GATEWAY_ALT=0; fi
+echo "Detected EUI $GATEWAY_EUI from $GATEWAY_EUI_NIC"
+
+read -r -p "Do you want to use remote settings file? [y/N]" response
+response=${response,,} # tolower
+
+if [[ $response =~ ^(yes|y) ]]; then
+    NEW_HOSTNAME="ttn-gateway"
+    REMOTE_CONFIG=true
+else
+    printf "       Host name [ttn-gateway]:"
+    read NEW_HOSTNAME
+    if [[ $NEW_HOSTNAME == "" ]]; then NEW_HOSTNAME="ttn-gateway"; fi
+
+    printf "       Descriptive name [ttn-ic880a]:"
+    read GATEWAY_NAME
+    if [[ $GATEWAY_NAME == "" ]]; then GATEWAY_NAME="ttn-ic880a"; fi
+
+    printf "       Contact email: "
+    read GATEWAY_EMAIL
+
+    printf "       Latitude [0]: "
+    read GATEWAY_LAT
+    if [[ $GATEWAY_LAT == "" ]]; then GATEWAY_LAT=0; fi
+
+    printf "       Longitude [0]: "
+    read GATEWAY_LON
+    if [[ $GATEWAY_LON == "" ]]; then GATEWAY_LON=0; fi
+
+    printf "       Altitude [0]: "
+    read GATEWAY_ALT
+    if [[ $GATEWAY_ALT == "" ]]; then GATEWAY_ALT=0; fi
+fi
 
 
 # Change hostname if needed
 CURRENT_HOSTNAME=$(hostname)
-NEW_HOSTNAME="ttn-gateway"
 
 if [[ $NEW_HOSTNAME != $CURRENT_HOSTNAME ]]; then
     echo "Updating hostname to '$NEW_HOSTNAME'..."
@@ -60,28 +91,18 @@ if [[ $NEW_HOSTNAME != $CURRENT_HOSTNAME ]]; then
     sed -i "s/$CURRENT_HOSTNAME/$NEW_HOSTNAME/" /etc/hosts
 fi
 
-# Check dependencies
-echo "Installing dependencies..."
-apt-get install swig python-dev
-
 # Install LoRaWAN packet forwarder repositories
 INSTALL_DIR="/opt/ttn-gateway"
 if [ ! -d "$INSTALL_DIR" ]; then mkdir $INSTALL_DIR; fi
 pushd $INSTALL_DIR
 
-# Build WiringPi
-if [ ! -d wiringPi ]; then
-    git clone git://git.drogon.net/wiringPi
+# Remove WiringPi built from source (older installer versions)
+if [ -d wiringPi ]; then
     pushd wiringPi
-else
-    pushd wiringPi
-    git reset --hard
-    git pull
+    ./build uninstall
+    popd
+    rm -rf wiringPi
 fi
-
-./build
-
-popd
 
 # Build LoRa gateway app
 if [ ! -d lora_gateway ]; then
@@ -113,19 +134,44 @@ make
 
 popd
 
+# Install dependencies
+echo "Installing dependencies..."
+apt-get install wiringpi
+
 # Symlink poly packet forwarder
 if [ ! -d bin ]; then mkdir bin; fi
 if [ -f ./bin/poly_pkt_fwd ]; then rm ./bin/poly_pkt_fwd; fi
 ln -s $INSTALL_DIR/packet_forwarder/poly_pkt_fwd/poly_pkt_fwd ./bin/poly_pkt_fwd
 cp -f ./packet_forwarder/poly_pkt_fwd/global_conf.json ./bin/global_conf.json
 
-echo -e "{\n\t\"gateway_conf\": {\n\t\t\"gateway_ID\": \"0000000000000000\",\n\t\t\"servers\": [ { \"server_address\": \"croft.thethings.girovito.nl\", \"serv_port_up\": 1700, \"serv_port_down\": 1701, \"serv_enabled\": true } ],\n\t\t\"ref_latitude\": $GATEWAY_LAT,\n\t\t\"ref_longitude\": $GATEWAY_LON,\n\t\t\"ref_altitude\": $GATEWAY_ALT,\n\t\t\"contact_email\": \"$GATEWAY_EMAIL\",\n\t\t\"description\": \"$GATEWAY_NAME\" \n\t}\n}" >./bin/local_conf.json
+LOCAL_CONFIG_FILE=$INSTALL_DIR/bin/local_conf.json
 
-# Reset gateway ID based on MAC
-./packet_forwarder/reset_pkt_fwd.sh start ./bin/local_conf.json
+# Remove old config file
+if [ -e $LOCAL_CONFIG_FILE ]; then rm $LOCAL_CONFIG_FILE; fi;
+
+if [ "$REMOTE_CONFIG" = true ] ; then
+    # Get remote configuration repo
+    if [ ! -d gateway-remote-config ]; then
+        git clone https://github.com/ttn-zh/gateway-remote-config.git
+        pushd gateway-remote-config
+    else
+        pushd gateway-remote-config
+        git pull
+        git reset --hard
+    fi
+
+    ln -s $INSTALL_DIR/gateway-remote-config/$GATEWAY_EUI.json $LOCAL_CONFIG_FILE
+
+    popd
+else
+    echo -e "{\n\t\"gateway_conf\": {\n\t\t\"gateway_ID\": \"$GATEWAY_EUI\",\n\t\t\"servers\": [ { \"server_address\": \"croft.thethings.girovito.nl\", \"serv_port_up\": 1700, \"serv_port_down\": 1701, \"serv_enabled\": true } ],\n\t\t\"ref_latitude\": $GATEWAY_LAT,\n\t\t\"ref_longitude\": $GATEWAY_LON,\n\t\t\"ref_altitude\": $GATEWAY_ALT,\n\t\t\"contact_email\": \"$GATEWAY_EMAIL\",\n\t\t\"description\": \"$GATEWAY_NAME\" \n\t}\n}" >$LOCAL_CONFIG_FILE
+fi
 
 popd
 
+echo "Gateway EUI is: $GATEWAY_EUI"
+echo "Check status updates on API: http://thethingsnetwork.org/api/v0/gateways/$GATEWAY_EUI/"
+echo
 echo "Installation completed."
 
 # Start packet forwarder as a service
