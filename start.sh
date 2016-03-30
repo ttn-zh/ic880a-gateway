@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # Reset iC880a PIN
-pin=17
+pin=25
 echo "$pin"  > /sys/class/gpio/export 
 echo "out" > /sys/class/gpio/gpio$pin/direction 
 echo "0"   > /sys/class/gpio/gpio$pin/value 
