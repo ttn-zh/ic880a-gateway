@@ -53,6 +53,11 @@ Now you're ready to start the software setup.
         $ sudo adduser ttn
         $ sudo adduser ttn sudo
 
+- To prevent the system asking root password regularly, add TTN user in sudoers file
+
+        $ sudo visudo
+add the line `ttn ALL=(ALL) NOPASSWD: ALL`
+
 - Logout and login as `ttn` and remove the default `pi` user
 
         $ sudo userdel -rf pi
