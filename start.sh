@@ -36,7 +36,7 @@ if [ -d ../gateway-remote-config ]; then
         exit 1
     fi
 
-    GATEWAY_EUI="FFFE"$(ip link show $GATEWAY_EUI_NIC | awk '/ether/ {print $2}' | awk -F\: '{print $1$2$3$4$5$6}')
+    GATEWAY_EUI=$(ip link show $GATEWAY_EUI_NIC | awk '/ether/ {print $2}' | awk -F\: '{print $1$2$3"FFFE"$4$5$6}')
     GATEWAY_EUI=${GATEWAY_EUI^^} # toupper
 
     echo "[TTN Gateway]: Use Gateway EUI $GATEWAY_EUI based on $GATEWAY_EUI_NIC"
