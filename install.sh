@@ -96,6 +96,14 @@ INSTALL_DIR="/opt/ttn-gateway"
 if [ ! -d "$INSTALL_DIR" ]; then mkdir $INSTALL_DIR; fi
 pushd $INSTALL_DIR
 
+# Remove WiringPi built from source (older installer versions)
+if [ -d wiringPi ]; then
+    pushd wiringPi
+    ./build uninstall
+    popd
+    rm -rf wiringPi
+fi 
+
 # Build LoRa gateway app
 if [ ! -d lora_gateway ]; then
     git clone https://github.com/TheThingsNetwork/lora_gateway.git
@@ -125,9 +133,6 @@ fi
 make
 
 popd
-
-# Install dependencies
-echo "Installing dependencies..."
 
 # Symlink poly packet forwarder
 if [ ! -d bin ]; then mkdir bin; fi
