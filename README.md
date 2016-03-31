@@ -58,6 +58,9 @@ Now you're ready to start the software setup.
         $ sudo visudo
 add the line `ttn ALL=(ALL) NOPASSWD: ALL`
 
+:warning: Beware this allows a connected console with the ttn user to issue any commands on your system, without any password control.
+This step is completely optionnal and remains your decision.
+
 - Logout and login as `ttn` and remove the default `pi` user
 
         $ sudo userdel -rf pi
