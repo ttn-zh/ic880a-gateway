@@ -18,7 +18,7 @@ iC880a pin      | Description   | RPi physical pin
 16              | MOSI          | 19
 17              | NSS           | 24
 
-![Pinout](pinout.jpg)
+![Pinout](images/pinout.jpg)
 
 Now you're ready to start the software setup.
 
