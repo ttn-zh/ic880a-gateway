@@ -102,7 +102,7 @@ if [ -d wiringPi ]; then
     ./build uninstall
     popd
     rm -rf wiringPi
-fi
+fi 
 
 # Build LoRa gateway app
 if [ ! -d lora_gateway ]; then
@@ -133,10 +133,6 @@ fi
 make
 
 popd
-
-# Install dependencies
-echo "Installing dependencies..."
-apt-get install wiringpi
 
 # Symlink poly packet forwarder
 if [ ! -d bin ]; then mkdir bin; fi
