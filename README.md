@@ -14,7 +14,7 @@ This installer targets the **USB version** of the board, if you have the SPI ver
 
         local $ ssh pi@raspberrypi.local
 
-- Disable graphical boot mode and reboot:
+- Disable graphical boot mode, expand the filesystem and reboot:
 
         $ sudo raspi-config
 
