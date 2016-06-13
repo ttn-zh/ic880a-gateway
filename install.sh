@@ -183,7 +183,8 @@ fi
 popd
 
 echo "Gateway EUI is: $GATEWAY_EUI"
-echo "Check status updates on API: http://thethingsnetwork.org/api/v0.1/gateways/$GATEWAY_EUI/"
+echo "The hostname is: $NEW_HOSTNAME"
+echo "Check gateway status here (find your EUI): http://staging.thethingsnetwork.org/gatewaystatus/"
 echo
 echo "Installation completed."
 
