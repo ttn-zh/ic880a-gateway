@@ -134,12 +134,12 @@ make
 
 popd
 
-# Build ic880a watchdog service
-if [ ! -d ic880a-watchdog ]; then
-    git clone https://github.com/ttn-zh/ic880a-watchdog.git
-    pushd ic880a-watchdog
+# Build lora gateway watchdog service
+if [ ! -d lora-gateway-watchdog ]; then
+    git clone https://github.com/ttn-zh/lora-gateway-watchdog.git
+    pushd lora-gateway-watchdog
 else
-    pushd ic880a-watchdog
+    pushd lora-gateway-watchdog
     git pull
     git reset --hard
 fi
