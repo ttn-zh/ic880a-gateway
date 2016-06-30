@@ -134,6 +134,20 @@ make
 
 popd
 
+# Build ic880a watchdog service
+if [ ! -d ic880a-watchdog ]; then
+    git clone https://github.com/ttn-zh/ic880a-watchdog.git
+    pushd ic880a-watchdog
+else
+    pushd ic880a-watchdog
+    git pull
+    git reset --hard
+fi
+
+make
+
+popd
+
 # Symlink poly packet forwarder
 if [ ! -d bin ]; then mkdir bin; fi
 if [ -f ./bin/poly_pkt_fwd ]; then rm ./bin/poly_pkt_fwd; fi
