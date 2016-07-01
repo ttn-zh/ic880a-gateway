@@ -42,7 +42,7 @@ if [ -d ../gateway-remote-config ]; then
     GATEWAY_EUI=$(ip link show $GATEWAY_EUI_NIC | awk '/ether/ {print $2}' | awk -F\: '{print $1$2$3"FFFE"$4$5$6}')
     GATEWAY_EUI=${GATEWAY_EUI^^} # toupper
 
-    echo "[TTN Gateway]: Use Gateway EUI $GATEWAY_EUI based on $GATEWAY_EUI_NIC"
+    echo "[TTN Gateway]: Using Gateway EUI $GATEWAY_EUI based on $GATEWAY_EUI_NIC"
     INSTALL_DIR="/opt/ttn-gateway"
     LOCAL_CONFIG_FILE=$INSTALL_DIR/bin/local_conf.json
 
