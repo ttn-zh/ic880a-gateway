@@ -154,6 +154,11 @@ if [ -f ./bin/poly_pkt_fwd ]; then rm ./bin/poly_pkt_fwd; fi
 ln -s $INSTALL_DIR/packet_forwarder/poly_pkt_fwd/poly_pkt_fwd ./bin/poly_pkt_fwd
 cp -f ./packet_forwarder/poly_pkt_fwd/global_conf.json ./bin/global_conf.json
 
+# Symlink watchdog
+if [ -f ./bin/watchdog ]; then rm ./bin/watchdog; fi
+ln -s $INSTALL_DIR/lora-gateway-watchdog/watchdog ./bin/watchdog
+
+# Setup local configuration
 LOCAL_CONFIG_FILE=$INSTALL_DIR/bin/local_conf.json
 
 # Remove old config file
