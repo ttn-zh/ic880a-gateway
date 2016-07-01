@@ -1,5 +1,6 @@
 [Unit]
 Description=The Things Network Gateway Watchdog
+After=ttn-gateway.service
 
 [Service]
 WorkingDirectory=/opt/ttn-gateway/bin/
@@ -7,7 +8,6 @@ ExecStart=/opt/ttn-gateway/bin/watchdog
 SyslogIdentifier=ttn-gateway-watchdog
 Restart=on-failure
 RestartSec=5
-After=ttn-gateway.service
 
 [Install]
 WantedBy=multi-user.target
