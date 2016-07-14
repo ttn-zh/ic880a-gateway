@@ -1,6 +1,5 @@
 [Unit]
 Description=The Things Network Gateway
-BindsTo=ttn-gateway-watchdog.service
 
 [Service]
 WorkingDirectory=/opt/ttn-gateway/bin/

@@ -134,29 +134,19 @@ make
 
 popd
 
-# Build lora gateway watchdog service
-if [ ! -d lora-gateway-watchdog ]; then
-    git clone https://github.com/ttn-zh/lora-gateway-watchdog.git
-    pushd lora-gateway-watchdog
-else
-    pushd lora-gateway-watchdog
-    git pull
-    git reset --hard
-fi
-
-make
-
-popd
-
 # Symlink poly packet forwarder
 if [ ! -d bin ]; then mkdir bin; fi
 if [ -f ./bin/poly_pkt_fwd ]; then rm ./bin/poly_pkt_fwd; fi
 ln -s $INSTALL_DIR/packet_forwarder/poly_pkt_fwd/poly_pkt_fwd ./bin/poly_pkt_fwd
 cp -f ./packet_forwarder/poly_pkt_fwd/global_conf.json ./bin/global_conf.json
 
-# Symlink watchdog
+# Remove old watchdog service
+if [ -d lora-gateway-watchdog ]; then rm -rf ./lora-gateway-watchdog; fi
 if [ -f ./bin/watchdog ]; then rm ./bin/watchdog; fi
-ln -s $INSTALL_DIR/lora-gateway-watchdog/watchdog ./bin/watchdog
+if [ -f /lib/systemd/system/ttn-gateway-watchdog.service ];
+    systemctl stop ttn-gateway-watchdog.service
+    rm /lib/systemd/system/ttn-gateway-watchdog.service
+fi
 
 # Setup local configuration
 LOCAL_CONFIG_FILE=$INSTALL_DIR/bin/local_conf.json
@@ -193,9 +183,7 @@ echo "Installation completed."
 # Start packet forwarder as a service
 cp ./start.sh $INSTALL_DIR/bin/
 cp ./ttn-gateway.service /lib/systemd/system/
-cp ./ttn-gateway-watchdog.service /lib/systemd/system/
 systemctl enable ttn-gateway.service
-systemctl enable ttn-gateway-watchdog.service
 
 echo "The system will reboot in 5 seconds..."
 sleep 5
