@@ -122,10 +122,13 @@ popd
 
 # Build packet forwarder
 if [ ! -d packet_forwarder ]; then
-    git clone https://github.com/TheThingsNetwork/packet_forwarder.git
+    git clone https://github.com/ttn-zh/packet_forwarder.git
     pushd packet_forwarder
 else
     pushd packet_forwarder
+    # Make sure we update the origin until the SX1301 reset changes have been
+    # merged back to TheThingsNetwork master repository
+    git remote set-url origin https://github.com/ttn-zh/packet_forwarder.git
     git pull
     git reset --hard
 fi
