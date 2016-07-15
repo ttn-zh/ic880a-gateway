@@ -145,7 +145,7 @@ cp -f ./packet_forwarder/poly_pkt_fwd/global_conf.json ./bin/global_conf.json
 
 # Remove old watchdog service
 if [ -d lora-gateway-watchdog ]; then rm -rf ./lora-gateway-watchdog; fi
-if [ -f ./bin/watchdog ]; then rm ./bin/watchdog; fi
+if [ -L ./bin/watchdog ]; then rm ./bin/watchdog; fi
 if [ -f /lib/systemd/system/ttn-gateway-watchdog.service ]; then
     systemctl stop ttn-gateway-watchdog.service
     rm /lib/systemd/system/ttn-gateway-watchdog.service
