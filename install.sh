@@ -122,7 +122,7 @@ popd
 
 # Build packet forwarder
 if [ ! -d packet_forwarder ]; then
-    git clone https://github.com/TheThingsNetwork/packet_forwarder.git
+    git clone https://github.com/devlaam/packet_forwarder.git
     pushd packet_forwarder
 else
     pushd packet_forwarder
