@@ -114,7 +114,8 @@ else
     git pull
 fi
 
-sed -i -e 's/PLATFORM= kerlink/PLATFORM= imst_rpi/g' ./libloragw/library.cfg
+sed -i -e 's/CFG_SPI= ???/CFG_SPI= native/g' ./libloragw/library.cfg
+sed -i -e 's/PLATFORM= ???/PLATFORM= imst_rpi/g' ./libloragw/library.cfg
 
 make
 
