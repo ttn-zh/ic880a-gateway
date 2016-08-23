@@ -117,7 +117,7 @@ fi
 sed -i -e 's/CFG_SPI= ???/CFG_SPI= native/g' ./libloragw/library.cfg
 sed -i -e 's/PLATFORM= ???/PLATFORM= imst_rpi/g' ./libloragw/library.cfg
 
-make
+make all
 
 popd
 
@@ -131,7 +131,7 @@ else
     git reset --hard
 fi
 
-make
+make all
 
 popd
 
