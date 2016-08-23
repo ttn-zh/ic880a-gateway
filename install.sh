@@ -106,7 +106,7 @@ fi
 
 # Build LoRa gateway app
 if [ ! -d lora_gateway ]; then
-    git clone https://github.com/TheThingsNetwork/lora_gateway.git
+    git clone https://github.com/devlaam/lora_gateway.git
     pushd lora_gateway
 else
     pushd lora_gateway
