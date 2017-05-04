@@ -113,7 +113,6 @@ else
     git fetch origin
     git checkout legacy
     git reset --hard
-    git pull
 fi
 
 sed -i -e 's/PLATFORM= kerlink/PLATFORM= imst_rpi/g' ./libloragw/library.cfg
@@ -130,7 +129,6 @@ else
     pushd packet_forwarder
     git fetch origin
     git checkout legacy
-    git pull
     git reset --hard
 fi
 
