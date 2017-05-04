@@ -126,7 +126,6 @@ else
     git fetch origin
     git checkout legacy
     git reset --hard
-    git pull
 fi
 
 cp ./libloragw/99-libftdi.rules /etc/udev/rules.d/99-libftdi.rules
@@ -147,7 +146,6 @@ else
     pushd packet_forwarder
     git fetch origin
     git checkout legacy
-    git pull
     git reset --hard
 fi
 
