@@ -53,7 +53,7 @@ read -r -p "Do you want to use remote settings file? [y/N]" response
 response=${response,,} # tolower
 
 if [[ $response =~ ^(yes|y) ]]; then
-    NEW_HOSTNAME="ttn-gateway"
+    NEW_HOSTNAME=$(hostname)
     REMOTE_CONFIG=true
 else
     printf "       Host name [ttn-gateway]:"
