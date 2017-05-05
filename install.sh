@@ -119,12 +119,13 @@ popd
 
 # Build LoRa gateway app
 if [ ! -d lora_gateway ]; then
-    git clone https://github.com/TheThingsNetwork/lora_gateway.git
+    git clone -b legacy https://github.com/TheThingsNetwork/lora_gateway.git
     pushd lora_gateway
 else
     pushd lora_gateway
+    git fetch origin
+    git checkout legacy
     git reset --hard
-    git pull
 fi
 
 cp ./libloragw/99-libftdi.rules /etc/udev/rules.d/99-libftdi.rules
@@ -139,11 +140,12 @@ popd
 
 # Build packet forwarder
 if [ ! -d packet_forwarder ]; then
-    git clone https://github.com/TheThingsNetwork/packet_forwarder.git
+    git clone -b legacy https://github.com/TheThingsNetwork/packet_forwarder.git
     pushd packet_forwarder
 else
     pushd packet_forwarder
-    git pull
+    git fetch origin
+    git checkout legacy
     git reset --hard
 fi
 
