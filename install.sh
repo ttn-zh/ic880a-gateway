@@ -169,7 +169,7 @@ popd
 
 echo "Gateway EUI is: $GATEWAY_EUI"
 echo "The hostname is: $NEW_HOSTNAME"
-echo "Check gateway status here (find your EUI): http://staging.thethingsnetwork.org/gatewaystatus/"
+echo "Open TTN console and register your gateway using your EUI: https://console.thethingsnetwork.org/gateways"
 echo
 echo "Installation completed."
 
