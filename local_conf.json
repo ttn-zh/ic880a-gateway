@@ -1,0 +1,35 @@
+{
+/* Put there parameters that are different for each gateway (eg. pointing one gateway to a test server while the others stay in production) */
+/* Settings defined in global_conf will be overwritten by those in local_conf */
+    "gateway_conf": {
+        /* you must pick a unique 64b number for each gateway (represented by an hex string) */
+        "gateway_ID": "",
+        /* Email of gateway operator, max 40 chars*/
+        "contact_email": "",
+        /* Public description of this device, max 64 chars */
+        "description": "",
+
+        /* "led_heartbeat": 19,   GPIO19 used for hearbeat, will always blink when running */
+        /* "led_down": 22,        GPIO22 used for downstream, will blink on each downstream from server */
+        /* "led_error": 13,       GPIO13 used for error, will blink when a error occured */
+        /* "led_packet": 5,       GPIO5 LED will blink on each packet received */
+        /* "led_pps": 6,       	  GPIO5 LED used for GPS PPS indicator (mainly linklabs board) */                   
+		/* "pin_pps": 0,       	  GPIO5 Pin where PPS signal is connected to (if any, mainly linklabs board) */       
+		
+    /* Enter VALID GPS coordinates below before enabling fake GPS */
+        "fake_gps": false,
+        "ref_latitude": 10,
+        "ref_longitude": 20,
+        "ref_altitude": -1,
+
+        /* Monitor configuration set true to activate */
+        "monitor_address": "192.168.170.112",
+        "monitor_port": 2008,
+        "ssh_path": "/usr/bin/ssh",
+        "ssh_port": 22,
+        "http_port": 80,
+        "ngrok_path": "/usr/bin/ngrok",
+        "system_calls": ["df -m","free -h","uptime","who -a","uname -a"],
+        "monitor": false
+    }
+}

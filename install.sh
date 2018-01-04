@@ -106,12 +106,12 @@ fi
 
 # Build LoRa gateway app
 if [ ! -d lora_gateway ]; then
-    git clone -b legacy https://github.com/TheThingsNetwork/lora_gateway.git
+    git clone -b master https://github.com/anyn99/lora_gateway.git
     pushd lora_gateway
 else
     pushd lora_gateway
     git fetch origin
-    git checkout legacy
+    git checkout master
     git reset --hard
 fi
 
@@ -123,12 +123,12 @@ popd
 
 # Build packet forwarder
 if [ ! -d packet_forwarder ]; then
-    git clone -b legacy https://github.com/TheThingsNetwork/packet_forwarder.git
+    git clone -b master https://github.com/anyn99/packet_forwarder.git
     pushd packet_forwarder
 else
     pushd packet_forwarder
     git fetch origin
-    git checkout legacy
+    git checkout master
     git reset --hard
 fi
 
@@ -140,7 +140,7 @@ popd
 if [ ! -d bin ]; then mkdir bin; fi
 if [ -f ./bin/poly_pkt_fwd ]; then rm ./bin/poly_pkt_fwd; fi
 ln -s $INSTALL_DIR/packet_forwarder/poly_pkt_fwd/poly_pkt_fwd ./bin/poly_pkt_fwd
-cp -f ./packet_forwarder/poly_pkt_fwd/global_conf.json ./bin/global_conf.json
+cp -f ./global_conf.json ./bin/global_conf.json
 
 LOCAL_CONFIG_FILE=$INSTALL_DIR/bin/local_conf.json
 
@@ -162,7 +162,11 @@ if [ "$REMOTE_CONFIG" = true ] ; then
 
     popd
 else
-    echo -e "{\n\t\"gateway_conf\": {\n\t\t\"gateway_ID\": \"$GATEWAY_EUI\",\n\t\t\"servers\": [ { \"server_address\": \"router.eu.thethings.network\", \"serv_port_up\": 1700, \"serv_port_down\": 1700, \"serv_enabled\": true } ],\n\t\t\"ref_latitude\": $GATEWAY_LAT,\n\t\t\"ref_longitude\": $GATEWAY_LON,\n\t\t\"ref_altitude\": $GATEWAY_ALT,\n\t\t\"contact_email\": \"$GATEWAY_EMAIL\",\n\t\t\"description\": \"$GATEWAY_NAME\" \n\t}\n}" >$LOCAL_CONFIG_FILE
+	cp -f ./local_conf.json $LOCAL_CONFIG_FILE
+	sed -i -e 's/"gateway_ID": "",/"gateway_ID": "$GATEWAY_EUI",/g' $LOCAL_CONFIG_FILE
+	sed -i -e 's/"contact_email": "",/"contact_email": "$GATEWAY_EMAIL",/g' $LOCAL_CONFIG_FILE
+	sed -i -e 's/"description": "",/"description": "$GATEWAY_NAME",/g' $LOCAL_CONFIG_FILE
+    # echo -e "{\n\t\"gateway_conf\": {\n\t\t\"gateway_ID\": \"$GATEWAY_EUI\",\n\t\t\"servers\": [ { \"server_address\": \"router.eu.thethings.network\", \"serv_port_up\": 1700, \"serv_port_down\": 1700, \"serv_enabled\": true } ],\n\t\t\"ref_latitude\": $GATEWAY_LAT,\n\t\t\"ref_longitude\": $GATEWAY_LON,\n\t\t\"ref_altitude\": $GATEWAY_ALT,\n\t\t\"contact_email\": \"$GATEWAY_EMAIL\",\n\t\t\"description\": \"$GATEWAY_NAME\" \n\t}\n}" >$LOCAL_CONFIG_FILE
 fi
 
 popd
