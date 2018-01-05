@@ -43,8 +43,7 @@ fi
 GATEWAY_EUI_NIC=$(echo $NICS | cut -d " " -f1)
 
 # Then get EUI based on the MAC address of that device
-read GATEWAY_MAC </sys/class/net/$GATEWAY_EUI_NIC/address
-GATEWAY_EUI=$(echo $GATEWAY_MAC | sed 's/://g')
+GATEWAY_EUI=$(cat /sys/class/net/$GATEWAY_EUI_NIC/address | awk -F\: '{print $1$2$3"FFFE"$4$5$6}')
 GATEWAY_EUI=${GATEWAY_EUI^^} # toupper
 
 echo "Detected EUI $GATEWAY_EUI from $GATEWAY_EUI_NIC"
