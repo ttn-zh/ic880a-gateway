@@ -35,12 +35,11 @@ echo "Gateway configuration:"
 # Try to get gateway ID from MAC address
 
 # Get first non-loopback network device that is currently connected
-NICS=$(ip -oneline link show up 2>&1 | grep -v LOOPBACK | sed -E 's/^[0-9]+: ([0-9a-z]+): .*/\1/')
-if [[ -z $NICS ]]; then
+GATEWAY_EUI_NIC=$(ip -oneline link show up 2>&1 | grep -v LOOPBACK | sed -E 's/^[0-9]+: ([0-9a-z]+): .*/\1/' | head -1)
+if [[ -z $GATEWAY_EUI_NIC ]]; then
     echo "ERROR: No network interface found. Cannot set gateway ID."
     exit 1
 fi
-GATEWAY_EUI_NIC=$(echo $NICS | cut -d " " -f1)
 
 # Then get EUI based on the MAC address of that device
 GATEWAY_EUI=$(cat /sys/class/net/$GATEWAY_EUI_NIC/address | awk -F\: '{print $1$2$3"FFFE"$4$5$6}')
