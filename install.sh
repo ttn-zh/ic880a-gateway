@@ -35,7 +35,7 @@ echo "Gateway configuration:"
 # Try to get gateway ID from MAC address
 
 # Get first non-loopback network device that is currently connected
-NICS=$(ip link 2>&1 | grep "state UP" | grep -v LOOPBACK | sed -E 's/^[0-9]+: ([0-9a-z]+): .*/\1/')
+NICS=$(ip -oneline link show up 2>&1 | grep -v LOOPBACK | sed -E 's/^[0-9]+: ([0-9a-z]+): .*/\1/')
 if [[ -z $NICS ]]; then
     echo "ERROR: No network interface found. Cannot set gateway ID."
     exit 1
