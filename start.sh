@@ -28,18 +28,16 @@ if [ -d ../gateway-remote-config ]; then
 
     # And then try to refresh the gateway EUI and re-link local_conf.json
 
-    # Same eth0/wlan0 fallback as on install.sh
-    GATEWAY_EUI_NIC="eth0"
-    if [[ `grep "$GATEWAY_EUI_NIC" /proc/net/dev` == "" ]]; then
-        GATEWAY_EUI_NIC="wlan0"
+    # Same network interface name detection as on install.sh
+    # Get first non-loopback network device that is currently connected
+    GATEWAY_EUI_NIC=$(ip -oneline link show up 2>&1 | grep -v LOOPBACK | sed -E 's/^[0-9]+: ([0-9a-z]+): .*/\1/' | head -1)
+    if [[ -z $GATEWAY_EUI_NIC ]]; then
+      echo "ERROR: No network interface found. Cannot set gateway ID."
+      exit 1
     fi
 
-    if [[ `grep "$GATEWAY_EUI_NIC" /proc/net/dev` == "" ]]; then
-        echo "ERROR: No network interface found. Cannot set gateway ID."
-        exit 1
-    fi
-
-    GATEWAY_EUI=$(ip link show $GATEWAY_EUI_NIC | awk '/ether/ {print $2}' | awk -F\: '{print $1$2$3"FFFE"$4$5$6}')
+    # Then get EUI based on the MAC address of that device
+    GATEWAY_EUI=$(cat /sys/class/net/$GATEWAY_EUI_NIC/address | awk -F\: '{print $1$2$3"FFFE"$4$5$6}')
     GATEWAY_EUI=${GATEWAY_EUI^^} # toupper
 
     echo "[TTN Gateway]: Use Gateway EUI $GATEWAY_EUI based on $GATEWAY_EUI_NIC"
