@@ -33,16 +33,18 @@ fi
 echo "Gateway configuration:"
 
 # Try to get gateway ID from MAC address
+# First try eth0, if that does not exist, try wlan0 (for RPi Zero)
+GATEWAY_EUI_NIC="eth0"
+if [[ `grep "$GATEWAY_EUI_NIC" /proc/net/dev` == "" ]]; then
+    GATEWAY_EUI_NIC="wlan0"
+fi
 
-# Get first non-loopback network device that is currently connected
-GATEWAY_EUI_NIC=$(ip -oneline link show up 2>&1 | grep -v LOOPBACK | sed -E 's/^[0-9]+: ([0-9a-z]+): .*/\1/' | head -1)
-if [[ -z $GATEWAY_EUI_NIC ]]; then
+if [[ `grep "$GATEWAY_EUI_NIC" /proc/net/dev` == "" ]]; then
     echo "ERROR: No network interface found. Cannot set gateway ID."
     exit 1
 fi
 
-# Then get EUI based on the MAC address of that device
-GATEWAY_EUI=$(cat /sys/class/net/$GATEWAY_EUI_NIC/address | awk -F\: '{print $1$2$3"FFFE"$4$5$6}')
+GATEWAY_EUI=$(ip link show $GATEWAY_EUI_NIC | awk '/ether/ {print $2}' | awk -F\: '{print $1$2$3"FFFE"$4$5$6}')
 GATEWAY_EUI=${GATEWAY_EUI^^} # toupper
 
 echo "Detected EUI $GATEWAY_EUI from $GATEWAY_EUI_NIC"
@@ -100,7 +102,7 @@ if [ -d wiringPi ]; then
     ./build uninstall
     popd
     rm -rf wiringPi
-fi 
+fi
 
 # Build LoRa gateway app
 if [ ! -d lora_gateway ]; then
