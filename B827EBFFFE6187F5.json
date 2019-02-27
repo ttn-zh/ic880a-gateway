@@ -1,0 +1,21 @@
+{
+        "gateway_conf": {
+                "gateway_ID": "B827EBFFFE6187F5",
+                "servers": [{
+                        "serv_type": "ttn",
+                        "serv_port_up" : 1700,
+                        "serv_port_down" : 1700,
+                        "server_address": "router.eu.thethings.network",
+                        "serv_gw_id": "eui-b827ebfffe6187f5",
+                        "serv_gw_key": "ttn-account-v2.YsyLX4ud0RxopKGU4jPdJYsn9V_hVobi2FotyQlEyO1Dm1-P1KerThy$",
+                        "serv_enabled": true
+                }],
+                "gps": true,
+                        "fake_gps": true,
+                        "ref_latitude": 45.080036,  
+                        "ref_longitude": 7.586638,  
+                        "ref_altitude": 245
+
+        }
+
+}
