@@ -50,4 +50,4 @@ if [ -d ../gateway-remote-config ]; then
 fi
 
 # Fire up the forwarder.
-./poly_pkt_fwd
+exec ./poly_pkt_fwd
