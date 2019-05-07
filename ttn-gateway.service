@@ -5,7 +5,7 @@ Description=The Things Network Gateway
 WorkingDirectory=/opt/ttn-gateway/bin/
 ExecStart=/opt/ttn-gateway/bin/start.sh
 SyslogIdentifier=ttn-gateway
-Restart=on-failure
+Restart=always
 RestartSec=5
 
 [Install]
